@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import com.dothantech.lpapi.LPAPI;
 import com.dothantech.printer.IDzPrinter;
+import com.dothantech.printer.IDzPrinter.PrinterState;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -63,6 +64,12 @@ public class LPAPIModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void openPrinter(String shownName, Callback callback) {
         callback.invoke(api.openPrinter(shownName));
+    }
+
+    @ReactMethod
+    public void getPrinterState(Callback callback) {
+        PrinterState state = api.getPrinterState();
+        callback.invoke(state.toString());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
