@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Dimensions, Alert, ScrollView } from 'react-native'
 import axios from 'axios'
 import moment from 'moment'
@@ -13,12 +13,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 20,
     backgroundColor: '#fff'
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginBottom: 20,
-    color: '#de475a'
   },
   formInput: {
     borderRadius: 10,
@@ -206,8 +200,6 @@ const Home = () => {
     <ScrollView contentContainerStyle={styles.container}>
 
       <Camera visible={showCamera} onClose={() => setShowCamera(false)} onCapture={onCapture} />
-
-      <Text style={styles.title}>Forwading</Text>
 
       <View style={styles.formInput}>
         <Text style={styles.label}>អតិថិជន :</Text>

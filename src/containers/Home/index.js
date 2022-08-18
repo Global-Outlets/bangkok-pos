@@ -30,16 +30,16 @@ const styles = StyleSheet.create({
   }
 })
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/logo.png')} style={styles.logo} />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Forwarding')}>
         <Text style={styles.text}>Forwarding</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BangkokTracking')}>
         <Text style={styles.text}>Bangkok Tracking</Text>
       </TouchableOpacity>
     </View>
