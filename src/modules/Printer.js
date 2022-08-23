@@ -15,6 +15,7 @@ const getPrinterState = () => new Promise(resolve => {
 
 const getConnectedPrinter = () => new Promise(resolve => {
   LPAPIModule.getAllPrinterAddressesPaired(obj => {
+
     const printer = Object.entries(obj)[0]
 
     resolve({ name: printer[0], address: printer[1] })

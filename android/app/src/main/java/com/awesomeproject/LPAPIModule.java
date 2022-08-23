@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package com.bangkokpos;
 
 import android.os.Build;
 
