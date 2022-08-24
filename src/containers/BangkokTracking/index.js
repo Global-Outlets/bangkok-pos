@@ -28,6 +28,7 @@ const BangkokTracking = ({ navigation }) => {
         resource: 'bangkok_tracking',
         payload: {
           image_url: await uploadImage(photo),
+          barcodes: photo.barcodes,
         }
       }
 
@@ -44,14 +45,14 @@ const BangkokTracking = ({ navigation }) => {
     const endpoint = 'https://hasunode.thailandoutlets.com/api/v2/file'
     const body = new FormData()
 
-    const ext = image.path.split('.').pop()
+    const ext = image.compressPath.split('.').pop()
     const name = `${Date.now()}.${ext}`
 
     body.append('resource', 'bangkok_tracking')
     body.append('file', {
       name,
       type: `image/${ext}`,
-      uri: `file://${image.path}`,
+      uri: `file://${image.compressPath}`,
     })
 
     const headers = { 'content-type': 'multipart/form-data', authorization: 'Bearer 3c10c0ad-aa7a-4acf-8c5f-2fa00d404c2e' }

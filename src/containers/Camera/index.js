@@ -1,6 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Modal, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Camera, useCameraDevices } from 'react-native-vision-camera'
+import { Image } from 'react-native-compressor'
+import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner'
 
 const styles = StyleSheet.create({
   camera: {
@@ -42,9 +44,43 @@ const Home = ({ visible, onCapture, onClose, loading }) => {
   const device = devices.back
   const camera = useRef(null)
 
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.ALL_FORMATS], {
+    checkInverted: true,
+  });
+
+  useEffect(() => {
+    requestPermission()
+  }, [])
+
+  const requestPermission = async () => {
+    const cameraPermission = await Camera.getCameraPermissionStatus()
+
+    if (cameraPermission !== 'authorized') {
+      await Camera.requestCameraPermission()
+    }
+  }
+
   const capture = async () => {
     const photo = await camera.current.takePhoto()
-    onCapture(photo)
+    let compress = photo.path
+
+    try {
+      compress = await Image.compress(`file://${photo.path}`, {
+        quality: 0.9,
+        compressionMethod: 'auto',
+      })
+    } catch (e) {
+      //
+    }
+
+    onCapture({
+      ...photo,
+      compressPath: compress,
+      barcodes: barcodes.map(code => ({
+        code: code.displayValue,
+        type: code.format === 256 ? 'qr' : 'barcode'
+      }))
+    })
   }
 
   if (!device) return null
@@ -62,6 +98,7 @@ const Home = ({ visible, onCapture, onClose, loading }) => {
         ref={camera}
         device={devices.back}
         style={styles.camera}
+        frameProcessor={frameProcessor}
       />
 
       <TouchableOpacity style={styles.close} activeOpacity={0.7} onPress={onClose}>
