@@ -14,10 +14,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff'
   },
-  formInput: {
-    borderRadius: 10,
+  inlineFormInput: {
     marginBottom: 10,
     flexDirection: 'row',
+  },
+  formInput: {
+    marginBottom: 10,
   },
   inputWrapper: {
     flex: 1,
@@ -56,18 +58,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   option: {
+    width: (dimensions.width - 60) / 4,
     paddingVertical: 5,
-    paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: '#ccc',
-    color: '#000',
     borderRadius: 10,
-    marginBottom: 10,
-    marginRight: 10,
+    marginBottom: 5,
+    marginRight: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  optionImage: {
+    width: 40,
+    height: 40
+  },
+  optionLabel: {
+    color: '#000',
+  },
+  activeLabel: {
+    color: '#fff'
   },
   active: {
     backgroundColor: '#de475a',
-    color: '#fff'
   },
   actions: {
     flexDirection: 'row',
@@ -97,6 +109,49 @@ const styles = StyleSheet.create({
     backgroundColor: '#4b0082'
   }
 })
+
+const PRODUCT_TYPES = [
+  {
+    value: 'Clothes',
+    text: 'ខោអាវ',
+    image: require(`../../assets/clothes.png`)
+  },
+  {
+    value: 'Accessories',
+    text: 'អេឡិចត្រូនិច',
+    image: require(`../../assets/accessories.png`)
+  },
+  {
+    value: 'Furniture',
+    text: 'គ្រឿងសង្ហារឹម',
+    image: require(`../../assets/furniture.png`)
+  },
+  {
+    value: 'Cosmetics',
+    text: 'គ្រៀងសំអាង',
+    image: require(`../../assets/cosmetics.png`)
+  },
+  {
+    value: 'Food',
+    text: 'អាហារ',
+    image: require(`../../assets/food.png`)
+  },
+  {
+    value: 'Jewelry',
+    text: 'គ្រឿងអលង្ការ',
+    image: require(`../../assets/jewelry.png`)
+  },
+  {
+    value: 'Plant',
+    text: 'រុក្ខជាតិ',
+    image: require(`../../assets/plant.png`)
+  },
+  {
+    value: 'Other',
+    text: 'ផ្សេងៗ',
+    image: require(`../../assets/other.png`)
+  }
+]
 
 const Home = () => {
   const [cus, setCus] = useState('')
@@ -203,7 +258,7 @@ const Home = () => {
 
       <Camera visible={showCamera} onClose={() => setShowCamera(false)} onCapture={onCapture} />
 
-      <View style={styles.formInput}>
+      <View style={styles.inlineFormInput}>
         <Text style={styles.label}>អតិថិជន :</Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.measurement}>CUS</Text>
@@ -216,7 +271,7 @@ const Home = () => {
         </View>
       </View>
 
-      <View style={styles.formInput}>
+      <View style={styles.inlineFormInput}>
         <Text style={styles.label}>ទម្ងន់ :</Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.measurement}>(g)</Text>
@@ -229,7 +284,7 @@ const Home = () => {
         </View>
       </View>
 
-      <View style={styles.formInput}>
+      <View style={styles.inlineFormInput}>
         <Text style={styles.label}>តម្លៃ :</Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.measurement}>฿</Text>
@@ -242,7 +297,7 @@ const Home = () => {
         </View>
       </View>
 
-      <View style={styles.formInput}>
+      <View style={styles.inlineFormInput}>
         <Text style={styles.label}>ចំនួន :</Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.measurement}>X</Text>
@@ -258,58 +313,23 @@ const Home = () => {
       <View style={styles.formInput}>
         <Text style={styles.label}>ប្រភេទទំនិញ :</Text>
         <View style={styles.optionWrapper}>
-          <Text
-            onPress={() => setProductType('Clothes')}
-            style={[styles.option, productType === 'Clothes' ? styles.active : null]}
-          >
-            ខោអាវ
-          </Text>
-          <Text
-            onPress={() => setProductType('Accessories')}
-            style={[styles.option, productType === 'Accessories' ? styles.active : null]}
-          >
-            គ្រឿងអេឡិចត្រូនិច
-          </Text>
-          <Text
-            onPress={() => setProductType('Furniture')}
-            style={[styles.option, productType === 'Furniture' ? styles.active : null]}
-          >
-            គ្រឿងសង្ហារឹម
-          </Text>
-          <Text
-            onPress={() => setProductType('Cosmetics')}
-            style={[styles.option, productType === 'Cosmetics' ? styles.active : null]}
-          >
-            គ្រៀងសំអាង
-          </Text>
-          <Text
-            onPress={() => setProductType('Food')}
-            style={[styles.option, productType === 'Food' ? styles.active : null]}
-          >
-            អាហារ
-          </Text>
-          <Text
-            onPress={() => setProductType('Jewelry')}
-            style={[styles.option, productType === 'Jewelry' ? styles.active : null]}
-          >
-            គ្រឿងអលង្ការ
-          </Text>
-          <Text
-            onPress={() => setProductType('Plant')}
-            style={[styles.option, productType === 'Plant' ? styles.active : null]}
-          >
-            រុក្ខជាតិ
-          </Text>
-          <Text
-            onPress={() => setProductType('Other')}
-            style={[styles.option, productType === 'Other' ? styles.active : null]}
-          >
-            ផ្សេងៗ
-          </Text>
+          {PRODUCT_TYPES.map(({ value, text, image }) => (
+            <TouchableOpacity
+              key={value}
+              activeOpacity={0.7}
+              onPress={() => setProductType(value)}
+              style={[styles.option, productType === value ? styles.active : null]}
+            >
+              <Image source={image} style={styles.optionImage} />
+              <Text style={[styles.optionLabel, productType === value ? styles.activeLabel : null]}>
+                {text}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
 
-      <View style={styles.formInput}>
+      <View style={styles.inlineFormInput}>
         <Text style={styles.label}>រូបភាព :</Text>
 
         <TouchableOpacity onPress={() => setShowCamera(true)}>
